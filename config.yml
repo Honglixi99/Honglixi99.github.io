@@ -1,0 +1,84 @@
+baseURL: "https://Honglixi99.github.io/"
+title: "Honglixi99 的技术博客"
+paginate: 10
+theme: PaperMod
+languageCode: zh-CN
+defaultContentLanguage: zh
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+params:
+  env: production
+  title: "Honglixi99 的技术博客"
+  description: "Android 开发 & AI 探索"
+  keywords: [Android, AI, 技术博客]
+  author: Honglixi99
+  DateFormat: "2006-01-02"
+  defaultTheme: auto
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowToc: true
+  TocOpen: false
+
+  profileMode:
+    enabled: true
+    title: "Honglixi99"
+    subtitle: "Android 开发者 / AI 爱好者"
+    buttons:
+      - name: 文章
+        url: /posts
+      - name: 关于
+        url: /about
+
+  homeInfoParams:
+    enabled: false
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/Honglixi99"
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+menu:
+  main:
+    - identifier: posts
+      name: 文章
+      url: /posts/
+      weight: 10
+    - identifier: tags
+      name: 标签
+      url: /tags/
+      weight: 20
+    - identifier: archives
+      name: 归档
+      url: /archives/
+      weight: 30
+    - identifier: about
+      name: 关于
+      url: /about/
+      weight: 40
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 50
