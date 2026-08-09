@@ -8,7 +8,7 @@ showToc: true
 
 ## 引言
 
-之前写过 Claude Code 的高效使用指南，讲的是 CLAUDE.md、Skills、Hooks、Subagents 这些上层的扩展能力怎么配置和组合。
+在《[Claude Code 高效使用指南](/posts/claude-code-guide/)》里，讲了 CLAUDE.md、Skills、Hooks、Subagents 这些上层扩展能力怎么配置和组合。
 
 但你有没有想过一个问题：**这些东西底下，Claude Code 到底是怎么跑起来的？**
 

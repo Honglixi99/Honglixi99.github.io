@@ -8,7 +8,7 @@ showToc: true
 
 ## 引言
 
-前面两篇分别讲了 Claude Code 的底层运行机制和四层扩展能力的分工。但到这里还有一个问题没解决：**当任务复杂到单个 Agent 扛不动，你怎么编排？编排完了，你怎么保证它不跑偏、不偷懒、不越界？**
+这个系列已经讲过 Claude Code 的[底层运行机制](/posts/claude-code-internals/)和[四层扩展能力的分工](/posts/claude-code-loop-skills/)。但到这里还有一个问题没解决：**当任务复杂到单个 Agent 扛不动，你怎么编排？编排完了，你怎么保证它不跑偏、不偷懒、不越界？**
 
 这两个问题，对应 Claude Code 最近两个最重要的能力：动态工作流（Dynamic Workflows）和 Loop Engineering。
 

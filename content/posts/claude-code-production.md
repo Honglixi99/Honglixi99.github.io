@@ -8,7 +8,7 @@ showToc: true
 
 ## 引言
 
-前面三篇分别讲了 Claude Code 的底层机制、扩展能力的工程演进、以及动态工作流和 Loop Engineering。但一直缺一个东西：**真实的、大规模的生产案例。**
+这个系列已经讲了 Claude Code 的[底层机制](/posts/claude-code-internals/)、[扩展能力的工程演进](/posts/claude-code-loop-skills/)、以及[自动编排与防失控](/posts/claude-code-workflows-loop/)。但一直缺一个东西：**真实的、大规模的生产案例。**
 
 Anthropic 最近两篇博客正好补上了这个缺口。一篇讲他们怎么用 Claude Code 把百万行代码从 Zig 迁到 Rust；另一篇讲他们新推出的 Managed Agents——一套帮团队把 Agent 从原型变成生产级服务的基础设施。
 
