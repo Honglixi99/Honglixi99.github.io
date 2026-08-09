@@ -32,7 +32,7 @@ params:
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: true
   ShowToc: true
-  TocOpen: false
+  TocOpen: true
 
   profileMode:
     enabled: true

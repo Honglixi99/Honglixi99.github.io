@@ -6,8 +6,6 @@ description: "从聊天框到会自己干活的团队：CLAUDE.md、Skills、Sub
 showToc: true
 ---
 
-> 本章整合自卡码笔记三篇文章：《Claude Code 高效使用指南》《Claude Code 完整使用指南：六种扩展能力》《CLAUDE.md 到底怎么写》
->
 > 一句话主线：**Claude Code 从来不是靠一个"万能 Prompt"变强，而是靠一套分工清楚的工作系统。把"每次都要重复的东西"一层层固化——固化得越多，你要操的心越少。**
 
 ---
