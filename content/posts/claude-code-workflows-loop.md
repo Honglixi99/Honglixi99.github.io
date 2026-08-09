@@ -1,5 +1,5 @@
 ---
-title: "动态工作流与 Loop Engineering：让 Agent 自动编排且不失控"
+title: "Claude Code 的自动编排与防失控"
 date: 2026-08-09
 tags: ["Claude Code", "Agent", "AI 编程"]
 description: "Claude 现场写 harness 拆任务给一队 Agent 去干——动态工作流怎么做到的？以及 Loop Engineering 的 14 步路线图，让自动化在失控之前停下来。"

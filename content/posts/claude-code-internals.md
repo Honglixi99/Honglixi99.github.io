@@ -1,5 +1,5 @@
 ---
-title: "Claude Code 底层机制：大代码库导航、Prompt Cache 与 Agent CLI"
+title: "Claude Code 的底层运行机制"
 date: 2026-08-09
 tags: ["Claude Code", "Agent", "AI 编程"]
 description: "拆解 Claude Code 的三大底层设计——Agentic Search 如何在大代码库中精准导航、Prompt Cache 如何让长会话不越跑越慢、以及为什么 Agent 时代的最佳载体是命令行。"

@@ -1,5 +1,5 @@
 ---
-title: "从百万行代码迁移到 Managed Agents：Claude Code 的生产级实践"
+title: "Claude Code 的生产级实践"
 date: 2026-08-09
 tags: ["Claude Code", "Agent", "AI 编程"]
 description: "Anthropic 用 Claude Code 两周迁移了百万行代码——不是一次性翻译，而是把迁移做成了一条可反复运行、机械验收的生产线。加上 Managed Agents 如何让 Agent 从原型几天上线。"
