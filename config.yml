@@ -34,8 +34,6 @@ params:
   ShowToc: true
   TocOpen: false
 
-  mainSections: ["posts", "claude-code"]
-
   profileMode:
     enabled: true
     title: "Honglixi99"
@@ -68,10 +66,6 @@ menu:
       name: 文章
       url: /posts/
       weight: 10
-    - identifier: claude-code
-      name: Claude Code 学习
-      url: /claude-code/
-      weight: 15
     - identifier: tags
       name: 标签
       url: /tags/
