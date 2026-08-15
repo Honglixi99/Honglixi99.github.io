@@ -71,6 +71,44 @@ Claude Code 的思路更像一个真实工程师的工作方式：
 5. **重复流程抽成 Skills**——安全审查、文档更新、发布检查，按需加载
 6. **再考虑 Plugins、MCP、LSP、Subagents**——前面基础没做好，直接上复杂插件容易越配越乱
 
+### 两个被低估的用法：Skills 渐进式披露、Hooks 自我改进
+
+大代码库里有大量专家知识：安全审查怎么做、支付模块怎么部署、文档更新流程是什么。如果全塞进 `CLAUDE.md`，它一定会爆炸，而且很多任务根本用不到。Skills 的关键是**按需加载**——Anthropic 管这叫 progressive disclosure（渐进式披露），用大白话说就是：
+
+> **别一上来把所有专家都请进会议室，谁用得上，再叫谁进来。**
+
+稳定通用规则放 CLAUDE.md，专门任务流程放 Skills，这条边界划清楚，Claude 每次启动才不会背一堆无关知识。
+
+Hooks 也有一个被低估的用法：**不只是拦截错误，还能让配置自我改进。** 比如 stop hook 在会话结束时回看这次过程——Claude 今天是不是绕了远路？是不是某个目录规则不清楚？是不是某个测试命令该写进子目录 CLAUDE.md？如果是，就提出更新建议。这样项目规则不是一次性写完，而是随着团队使用不断迭代——这才是大团队落地 AI 编程真正需要的能力。
+
+### 团队落地：为什么需要一个 Agent 管理人
+
+技术配置只是第一步，大团队里真正难的是组织落地。如果每个工程师都自己写 CLAUDE.md、自己配 hooks、自己接 MCP，很快就会各玩各的：好经验留在个人电脑里，踩过的坑没人沉淀，新人进来还要重新摸索。
+
+Anthropic 文章里提到了一个角色：**agent manager（Agent 管理人）**——负责维护 AI 编程工程体系的人。他不一定是专职，小团队里一个 DRI 就够，但要负责：
+
+- 统一 CLAUDE.md 层级规范
+- 管理 hooks 和权限策略
+- 维护团队可用的 Skills
+- 选择和分发 Plugins
+- 管理 MCP 接入边界
+- 推动代码审查和安全流程
+- 定期清理过期规则
+
+大公司里，这个角色通常落在 DevEx、开发效率或基础架构团队下面，因为它本质上是开发者工具的一部分。Anthropic 说得挺现实：**自下而上的使用会带来热情，但没有集中维护，知识会停留在小圈子里。** 很多公司现在都是几个工程师先偷偷用，用得好的那个人效率很高，但团队并没有真正吃到红利——因为方法没有标准化，也没有沉淀成项目资产。
+
+### 普通开发者怎么开始
+
+如果你不是团队负责人，只是个普通开发者，也能做很多事，不用一上来就搭 MCP、写 plugin、搞平台：
+
+1. **给当前项目写一个根 CLAUDE.md**——哪怕只有 20 行，写清楚项目结构、常用命令、禁止事项
+2. **把你反复提醒 Claude Code 的话沉淀进去**——凡是你连续说过三次的规则，都该考虑写进文件
+3. **给常改目录补子目录 CLAUDE.md**——经常改 `docs/` 就写文档规则，经常改 `services/payment/` 就写支付模块规则
+4. **排除明显无关文件**——生成代码、构建产物、三方依赖，别让 Agent 老去读
+5. **把重复流程整理成 skill 或脚本**——比如每次发版前要检查的 5 件事，别每次口头提醒
+
+大代码库里，AI 编程不是"换个更强模型"就完了。真正拉开差距的，是你**能不能把项目知识、工具链和团队规范，变成 Claude Code 可以稳定使用的工程支架**。
+
 ## 二、Prompt Cache：为什么长会话不会越跑越慢
 
 Anthropic 有一篇博客标题就叫"Prompt caching is everything"。很多人以为缓存就是"问过的问题下次直接拿答案"。**完全不是。**
@@ -106,7 +144,7 @@ Claude Code 的请求组织非常讲究这一点：
 
 **MCP 工具多了，不要每轮动态删工具。** 工具集合变了，缓存前缀就变了。Claude Code 的思路不是"动态删工具"，而是"延迟加载工具详情"——先在稳定前缀放轻量 stub（工具名 + 极少元信息），模型真需要时才加载完整 schema。
 
-**上下文压缩不能另起一个请求。** 如果你单独发一个请求让模型总结，它的系统提示词和父会话完全不一样，缓存全废。Claude Code 走缓存友好分叉：用和父会话一样的前缀，只在末尾追加压缩指令，复用父会话缓存。
+**上下文压缩不能另起一个请求。** 如果你单独发一个请求让模型总结，它的系统提示词和父会话完全不一样，缓存全废。Claude Code 走缓存友好分叉：用和父会话一样的前缀，只在末尾追加压缩指令，复用父会话缓存。这也带来一个工程要求：**系统必须预留压缩缓冲区**——不能等上下文窗口真的塞满了才想着"现在总结一下吧"，那时候已经没空间放压缩指令和摘要输出了。compact 不是最后一刻的急救，而是上下文生命周期管理的一部分。
 
 ### 缓存命中率要像服务可用性一样监控
 
@@ -114,11 +152,33 @@ Claude Code 的请求组织非常讲究这一点：
 
 做 Agent 要多看两类 token：cache creation input tokens（本轮写入缓存）和 cache read input tokens（本轮从缓存读取）。如果 read 很高、creation 很低，说明缓存用得好。如果 creation 连续很高，先别怀疑模型，先查上下文组织。
 
+### 对普通开发者的五条实用建议
+
+如果只是日常使用 Claude Code，记住这几条就够了：
+
+1. **别在长任务中频繁切模型**——切一次模型，下一轮缓存要重建，可能明显变慢
+2. **CLAUDE.md 改完不一定立刻生效**——它是会话开头加载的项目上下文，中途改了不影响当前会话；要么重新开会话，要么在当前对话里明确补充
+3. **MCP 别边做任务边频繁接入、断开**——工具定义影响缓存，最好在任务开始前就把需要的 MCP 配好
+4. **compact 放在自然断点**——比如一个子任务完成后再压缩，而不是在关键编辑中间突然压缩
+5. **别把所有临时要求都塞进项目规则文件**——稳定规则写进 CLAUDE.md，临时要求直接在当前对话里说
+
+如果是自己做 Agent 产品，还要更进一步：Prompt 结构按稳定性分层、工具定义顺序必须确定、工具集合尽量会话内稳定、动态状态用消息追加、多模型用 subagent 隔离、工具详情用延迟加载、compact 走父会话缓存友好分叉、缓存命中率纳入监控。这不是优化清单，是架构清单。
+
 ## 三、Agent CLI：为什么最火的 Agent 产品都回了命令行
 
 这可能是最反直觉的一个趋势：AI 都发展到 Agent 了，最火的产品反而钻回了黑乎乎的命令行。
 
 2025 年 2 月，Anthropic 把 Claude Code 作为终端里的研究预览发布；同年 4 月，OpenAI 上线开源的 Codex CLI，5 月才推出 Codex Web。两家公司同时撞上了同一个工程事实：**聊天框适合模型"说"，CLI 才方便 Agent 真正"做"。**
+
+### CLI 的前世今生：它从来不只是"黑框里敲字"
+
+先把三个词掰清楚：Terminal 是承载输入输出的终端，Shell 是解释命令的程序，CLI 是用文本命令和软件交互的方式。Claude Code、Codex CLI 今天已经是带面板、状态和快捷键的 TUI，但它们真正依赖的底座，仍然是 Shell、文件系统和一整套命令行工具。
+
+最早的计算机甚至谈不上命令行——人把程序打在卡片上交给机器批处理，结果晚点再拿回来，人和机器之间没有实时对话。后来分时系统和终端出现，人终于可以输入一行命令、马上看到一行结果。到了 Unix，Shell 又做了一次关键升级：它不只是启动程序的入口，还是一门**可以组合程序的控制语言**。`stdin`、`stdout`、`stderr`、退出码、重定向、管道——这几个设计看起来朴素，却把一堆小工具接成了工作流。1978 年 Bourne 对 Unix Shell 的定义里，就已经同时强调了控制流、环境、重定向和进程管道。
+
+GUI 兴起后命令行没有消失，因为两者解决的是不同成本：GUI 解决**人的发现成本**——按钮摆在那里，不会写命令也能点；CLI 解决**系统的组合成本**——一个命令能进脚本、进 CI、跑远程机器，还能把输出交给下一个程序。到了云原生时代，Git、Docker、Kubernetes、Terraform 几乎都把 CLI 当成一等公民，原因很简单：服务器没有必要配一块屏幕，自动化也不会拿鼠标点按钮。
+
+Agent 时代命令行又转了一圈回来，但这次敲命令的主角从人变成了模型。变化的不是命令行突然变好用了，而是**"把人的意图翻译成精确语法"这份苦活，从人转移给了 Agent**——CLI 原本最劝退人的门槛，恰好被大模型吃掉了。
 
 ### CLI 不是"黑框里敲字"，是可执行、可观察、可组合的反馈系统
 
@@ -151,11 +211,28 @@ git diff | codex exec "检查这次修改是否引入并发问题"
 
 交互工具因此变成了脚本组件，可以进 CI、定时任务和无人值守流程。网页聊天框很难自然做到这一点。
 
+### 但今天很多 CLI，并没有为 Agent 准备好
+
+别因为 Agent 能跑命令，就觉得所有 CLI 都天然可靠。大量老工具默认操作者是人：会弹交互确认、输出彩色进度条、把错误混进 stdout，甚至失败了还返回 `0`。人能凭经验看懂，Agent 接进流水线就容易翻车。
+
+真正 Agent 友好的 CLI，至少要做到几件事：
+
+- 支持 `--json` 或稳定 Schema，不逼模型从花哨日志里猜字段
+- stdout 放结果、stderr 放诊断，退出码真实反映成功或失败
+- 提供 `--dry-run`、diff 和幂等操作，让 Agent 能先预演、失败后安全重试
+- 支持非交互模式、超时和取消，不要半夜卡在"是否继续？Y/n"
+- 权限最小化，凭证可按任务、目录、命令和时间收口
+- 输出可审计，明确谁执行了什么、改了哪里、依据是什么
+
+**未来 CLI 的竞争，不只是给人写得顺不顺手，还要看它能不能被 Agent 稳定调用。** 这也是为什么 Claude Code 和 Codex 都在权限模型上花重力气——Agent 越能干，误操作和提示注入的爆炸半径越大。没有边界的 CLI，不是自动化，是把生产事故也自动化。
+
 ### CLI 不是终局，但会长期存在
 
 当 Agent 从一次处理一个任务，变成同时管理十几个长期任务，纯终端很快就不够用了。你需要任务队列、并行状态、权限面板、diff 审核、通知和跨设备接力。
 
 CLI 更像 Agent 世界里的"窄腰层"：上面可以是 IDE、桌面 App、网页、手机，下面可以接 Git、测试、数据库、容器和云服务，中间通过命令和结构化结果完成交接。**未来不会由一个入口通吃，而是"人类监督层—Agent 编排层—工具执行层"三层分工。**
+
+另外，CLI 也不是所有工具的最佳协议——API 和 MCP 有明确 Schema，通常比解析自然语言日志更稳；Computer Use 则负责那些既没有 API、也没有 CLI 的最后一公里。但 CLI 不会消失，真正的终局是：**所有软件都长出一套 Agent 能调用、能验证、能审计、也能被安全关住的接口，而 CLI 只是最早准备好的那一个。**
 
 ## 总结
 
@@ -171,6 +248,9 @@ Claude Code 不是在 CLI 里塞了一个强模型。它是在模型之外，做
 
 ## 参考链接
 
-- Anthropic Blog: How Claude Code works in large codebases
-- Anthropic Blog: Lessons from building Claude Code — Prompt caching is everything
-- Anthropic: Claude 3.7 Sonnet & Claude Code research preview
+- Anthropic Blog: How Claude Code works in large codebases: https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start
+- Anthropic Blog: Lessons from building Claude Code — Prompt caching is everything: https://claude.com/blog/lessons-from-building-claude-code-prompt-caching-is-everything
+- Anthropic: Claude 3.7 Sonnet & Claude Code research preview: https://www.anthropic.com/news/claude-3-7-sonnet
+- Anthropic 工程博客（Claude Code 沙箱与权限边界）: https://www.anthropic.com/engineering/claude-code-sandboxing
+- OpenAI（Codex CLI 上线）: https://openai.com/index/introducing-upgrades-to-codex/
+- Bell Labs 论文（The UNIX Shell）: https://www.nokia.com/bell-labs/publications-and-media/publications/unix-time-sharing-system-the-unix-shell/
