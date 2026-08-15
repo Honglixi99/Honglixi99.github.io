@@ -19,7 +19,7 @@ Agentic Search：像工程师一样边搜边读 Claude Code 的思路更像一�
 Anthropic 最近两篇博客正好补上了这个缺口。一篇讲他们怎么用 Claude Code 把百万行代码从 Zig 迁到 Rust；另一篇讲他们新推出的 Managed Agents——一套帮团队把 Agent 从原型变成生产级服务的基础设施。
 这两篇放在一起看，就是 Claude Code 从"个人工具"走向"生产平台"的完整路线图。
 一、百万行代码迁移：不是翻译，是生产线 先看几个数字：
-Bun 的 Jarred Sumner 用 Claude Code 把项目从 Zig 迁到 Rust，不到两周产出 100 万行代码，合并前 CI 中所有原有测试通过。另一个案例，Anthropic Labs 的 Mike Krieger 用一个周末，把 Python 代码库迁成了 16.5 万行 TypeScript，跑了数百个 Agent、8 道阶段闸门、3 轮对抗审查。
+Bun 的 Jarred Sumner 用 Claude Code 把项目从 Zig 迁到 Rust，不到两周产出 100 万行代码，合并前 CI 中所有原有测试通过（合并后暴露了 19 个回归，目前已经全部修掉）。另一个案例，Anthropic Labs 的 Mike Krieger 用一个周末，把 Python 代码库迁成了 16.5 万行 TypeScript，跑了数百个 Agent、8 道阶段闸门、3 轮对抗审查。
 Anthropic 过去一个月一共迁了 10 个代码包，每个都有数万到数十万行。
 注意，这不是"Claude 一次把代码翻译对了"。真正让规模迁移成立的，是它把迁移改造成了一条可以反复运行、机械验收、失败后继续收敛的生产线。
 人不再追着每个文件改。人负责规则、裁判和异常模式，Agent 负责把队列烧完。用原文里最值钱的一句话：别修代码，修产生代码的循环。
