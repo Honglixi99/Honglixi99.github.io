@@ -15,7 +15,7 @@ Agentic Search：像工程师一样边搜边读 Claude Code 的思路更像一�
 真正的问题是：Claude Code 能不能在读很少文件的情况下，找到真正相关的那几个文件？
 所以大代码库要做的是上下文治理：
 该加载的规则提前加载 不相关的目录不要读 生成代码和构建产物要排除 测试命令要按子目录收敛 同名函数要靠 LSP 区分 大范围探索交给 subagent 太多上下文会降低性能，太少上下文会让 Claude 盲搜。 这句话很适合放到团队规范里。
-...</p></div><footer class=entry-footer><span title='2026-08-09 00:00:00 +0000 UTC'>2026-08-09</span>&nbsp;·&nbsp;<span>3 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的底层运行机制" href=https://yzaaa.cc/posts/claude-code-internals/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 的生产级实践</h2></header><div class=entry-content><p>引言 这个系列已经讲了 Claude Code 的底层机制、扩展能力的工程演进、以及自动编排与防失控。但一直缺一个东西：真实的、大规模的生产案例。
+...</p></div><footer class=entry-footer><span title='2026-08-15 00:00:00 +0000 UTC'>2026-08-15</span>&nbsp;·&nbsp;<span>3 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的底层运行机制" href=https://yzaaa.cc/posts/claude-code-internals/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 的生产级实践</h2></header><div class=entry-content><p>引言 这个系列已经讲了 Claude Code 的底层机制、扩展能力的工程演进、以及自动编排与防失控。但一直缺一个东西：真实的、大规模的生产案例。
 Anthropic 最近两篇博客正好补上了这个缺口。一篇讲他们怎么用 Claude Code 把百万行代码从 Zig 迁到 Rust；另一篇讲他们新推出的 Managed Agents——一套帮团队把 Agent 从原型变成生产级服务的基础设施。
 这两篇放在一起看，就是 Claude Code 从"个人工具"走向"生产平台"的完整路线图。
 一、百万行代码迁移：不是翻译，是生产线 先看几个数字：
@@ -25,7 +25,7 @@ Anthropic 过去一个月一共迁了 10 个代码包，每个都有数万到数
 人不再追着每个文件改。人负责规则、裁判和异常模式，Agent 负责把队列烧完。用原文里最值钱的一句话：别修代码，修产生代码的循环。
 为什么代码迁移特别适合多 Agent 大规模迁移刚好满足 Agent 最喜欢的几个条件：
 工作能并行：上千个文件可以切成独立批次 旧代码就是规格：原程序已经把行为写出来了，Agent 可以同时对照源语言、目标语言和真实输出 有机械裁判：编译器、冒烟测试、完整测试套件、命令输出 diff，都能明确告诉 Agent 对还是错 规则可以向后传播：一个 Agent 发现边界问题，不是只补当前文件，而是把解法写回迁移规则，后面所有 Agent 都按新规则执行 这也是它和普通"批量翻译代码"的根本区别：并行只负责提速，统一规则和机械验收才负责不失控。
-...</p></div><footer class=entry-footer><span title='2026-08-09 00:00:00 +0000 UTC'>2026-08-09</span>&nbsp;·&nbsp;<span>2 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的生产级实践" href=https://yzaaa.cc/posts/claude-code-production/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 的自动编排与防失控</h2></header><div class=entry-content><p>引言 这个系列已经讲过 Claude Code 的底层运行机制和四层扩展能力的分工。但到这里还有一个问题没解决：当任务复杂到单个 Agent 扛不动，你怎么编排？编排完了，你怎么保证它不跑偏、不偷懒、不越界？
+...</p></div><footer class=entry-footer><span title='2026-08-15 00:00:00 +0000 UTC'>2026-08-15</span>&nbsp;·&nbsp;<span>2 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的生产级实践" href=https://yzaaa.cc/posts/claude-code-production/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 的自动编排与防失控</h2></header><div class=entry-content><p>引言 这个系列已经讲过 Claude Code 的底层运行机制和四层扩展能力的分工。但到这里还有一个问题没解决：当任务复杂到单个 Agent 扛不动，你怎么编排？编排完了，你怎么保证它不跑偏、不偷懒、不越界？
 这两个问题，对应 Claude Code 最近两个最重要的能力：动态工作流（Dynamic Workflows）和 Loop Engineering。
 一、动态工作流：Claude 自己写 harness，你只负责目标和边界 harness 是什么？就是控制 Claude 读什么、什么时候动手、产出怎么验证的那层编排。Claude Code 自带的默认 harness 打磨得很好，但它是冲着"写代码"这件事调出来的。
 而你实际让 Claude Code 干的活远不止写代码：深度调研、安全审计、代码迁移、多人评审。这些任务的"最佳跑法"和写代码不一样。过去要把它们做到极致，你得自己手搓一套 harness。
@@ -34,7 +34,7 @@ Anthropic 过去一个月一共迁了 10 个代码包，每个都有数万到数
 agent(prompt, opts)：开一个子 Agent，给它独立上下文窗口，还能用 JSON Schema 约束输出结构 parallel(...)：栅栏——几个任务全跑完才放行 pipeline(items, ...)：流水线——让一批东西过几道工序，A 项先走，B 项慢一点也不挡道 Claude 拿这几块积木，针对你的任务搭出一套编排：要不要开子 Agent、开几个、哪步用强模型哪步用便宜模型、要不要用 git worktree 把不同方案隔开、哪些并行哪些串行——这些不是你预先规定死的，是 Claude 分析完任务自己定的。
 为什么非得这么折腾？单个上下文扛不动 长任务里，一个 Claude 单挑全部时，老三样毛病会准时冒出来：
 偷懒：审 50 个文件审到 35 个就说"干完了"——不是模型坏了，是上下文塞满了，它把"差不多"当成了"做完" 自夸：让 Claude 验自己的活，它会偏向维护自己之前的结论 跑偏：对话拉长，反复压缩摘要，把边界要求、约束条件一点点丢掉 动态工作流的解法是结构性的——与其让一个 Claude 扛全部，不如开一堆互相隔离、各自上下文干净、只盯一件事的子 Agent。隔离让偷懒无处藏，独立的验证 Agent 让自夸自然消失，每个窗口都短让跑偏被摁住。
-...</p></div><footer class=entry-footer><span title='2026-08-09 00:00:00 +0000 UTC'>2026-08-09</span>&nbsp;·&nbsp;<span>2 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的自动编排与防失控" href=https://yzaaa.cc/posts/claude-code-workflows-loop/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 能力的工程化演进</h2></header><div class=entry-content><p>引言 Claude Code 作者 Boris Cherny 说过一句话：“我已经不写 Prompt 了，我写 Loop。”
+...</p></div><footer class=entry-footer><span title='2026-08-15 00:00:00 +0000 UTC'>2026-08-15</span>&nbsp;·&nbsp;<span>2 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 的自动编排与防失控" href=https://yzaaa.cc/posts/claude-code-workflows-loop/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>Claude Code 能力的工程化演进</h2></header><div class=entry-content><p>引言 Claude Code 作者 Boris Cherny 说过一句话：“我已经不写 Prompt 了，我写 Loop。”
 这句话被很多人转发，但少有人真正解释清楚它到底意味着什么。Prompt 和 Loop 的差别，不是写一句话还是写一段话的差别——而是两种完全不同的工程思维。
 这篇文章就顺着这条线，把三个核心问题讲清楚：Loop 到底是什么、四层扩展能力（CLAUDE.md / Hooks / Skills / Subagents）怎么分工、以及 Skills 到底怎么写才不是废纸。
 一、为什么只写 Prompt 不够了？ Prompt 当然有用。你问一个概念、贴一段代码让它改写、让它生成一个 SQL——这些场景里，Prompt 就够了。因为任务短、边界清楚、结果也容易人工判断。
@@ -45,7 +45,7 @@ agent(prompt, opts)：开一个子 Agent，给它独立上下文窗口，还能�
 验证通过就停止。验证失败就把失败信息带回去，重新计划。触碰边界就暂停，让人决策。
 这和普通 Prompt 的差别很大。Prompt 是"我说一句，你答一句"。Loop 是"我给你目标、工具、规则和验收标准，你自己推进，但每一步都要留下证据"。
 但坏 Loop 比坏 Prompt 更危险。一个坏 Prompt，最多回答不理想。一个坏 Loop，会一直跑、一直改、一直消耗 token，还可能把项目改乱。
-...</p></div><footer class=entry-footer><span title='2026-08-09 00:00:00 +0000 UTC'>2026-08-09</span>&nbsp;·&nbsp;<span>3 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 能力的工程化演进" href=https://yzaaa.cc/posts/claude-code-loop-skills/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://yzaaa.cc/>Honglixi99 的技术博客</a></span> ·
+...</p></div><footer class=entry-footer><span title='2026-08-15 00:00:00 +0000 UTC'>2026-08-15</span>&nbsp;·&nbsp;<span>3 分钟</span>&nbsp;·&nbsp;<span>Honglixi99</span></footer><a class=entry-link aria-label="post link to Claude Code 能力的工程化演进" href=https://yzaaa.cc/posts/claude-code-loop-skills/></a></article></main><footer class=footer><span>&copy; 2026 <a href=https://yzaaa.cc/>Honglixi99 的技术博客</a></span> ·
 <span>Powered by
 <a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
 <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
