@@ -68,6 +68,16 @@ Claude 拿这几块积木，针对你的任务搭出一套编排：要不要开�
 - 值得上：50 个文件的安全审计、上千行的排序打分、高不确定要反复探索的调研、高风险要独立验证的改动
 - 别上：两行的 bug、改一个文件——杀鸡用牛刀，钱白烧
 
+### 和 Managed Agents、Agent Teams 是什么关系
+
+这三个概念容易混，其实是一条线上的三个点：
+
+- **Managed Agents**：平台替你托管 harness——连基础设施一起管起来，会话可恢复、断了能接着跑
+- **Agent Teams**：角色固定、编排固定，适合"已经知道要哪些角色"的场景
+- **动态工作流**：角色和编排都临场拆解，适合"还不知道怎么拆"的探索型任务
+
+一句话：**角色固定就用 Teams，角色得临场拆解就用动态工作流。** 动态工作流是 Agent Teams 的"按需版"。目前它还是 research preview，跑在 Claude Opus 4.8 上。
+
 ## 二、Loop Engineering：14 步让自动化不失控
 
 动态工作流解决了"怎么编排"，但还有一个更重要的问题：**怎么保证编排不跑偏？** 这就是 Loop Engineering 要解决的事——不是怎么搭 loop，而是怎么搭一个能长期守住、不失控、不越界的 loop。
@@ -80,6 +90,8 @@ Claude 拿这几块积木，针对你的任务搭出一套编排：要不要开�
 4. **Agent 能跑自己写的代码吗？** 需要有日志、能复现、看得到哪里崩。
 
 还有个附加题比上面四个都重要：**你打算 review 它产出的代码吗？** 不打算，就别建 loop。
+
+谁适合上手：**有强测试套件的团队**，干 CI 失败分类、依赖升级、lint-and-fix 这类任务。谁不适合：消费级套餐的个人开发者（token 预算不够烧）、测试覆盖不够的代码库（没有闸门）、瓶颈在 review 而不在打字速度的团队。
 
 ### 五个核心构件
 
@@ -136,6 +148,6 @@ Claude 拿这几块积木，针对你的任务搭出一套编排：要不要开�
 
 ## 参考链接
 
-- Anthropic Blog: Dynamic workflows in Claude Code
-- Addy Osmani: Loop Engineering
-- Anthropic 工程文档
+- Anthropic Blog: A harness for every task — dynamic workflows in Claude Code: https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code
+- Addy Osmani: Loop Engineering: https://addyosmani.com/blog/
+- Anthropic 工程文档（Managed Agents 与 Dynamic Workflows）: https://claude.com/blog
