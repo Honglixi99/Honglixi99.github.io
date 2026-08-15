@@ -1,6 +1,6 @@
 ---
 title: "Claude Code 能力的工程化演进"
-date: 2026-08-09
+date: 2026-08-15
 tags: ["Claude Code", "Agent", "AI 编程"]
 description: "从「写 Prompt」到「写 Loop」到底变了什么？CLAUDE.md、Hooks、Skills、Subagents 四层能力应该怎么分工？Anthropic 内部几百个 Skill 踩出了什么经验？"
 showToc: true
