@@ -433,9 +433,111 @@
     .hero p { font-size: 19px; }
     .confession .big { font-size: 36px; letter-spacing: 10px; }
   }
+
+  /* ===== 密码锁屏 ===== */
+  .lock {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: linear-gradient(180deg, #fdece1 0%, #f5bfa6 40%, #e39aa3 70%, #a97fa8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .lock.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .lock-card {
+    text-align: center;
+    background: rgba(255,255,255,0.42);
+    backdrop-filter: blur(14px);
+    border-radius: 26px;
+    padding: 52px 42px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 14px 46px rgba(0,0,0,0.16);
+  }
+  .lock-heart {
+    font-size: 42px;
+    color: #a83f56;
+    display: inline-block;
+    animation: beat 1.6s ease-in-out infinite;
+  }
+  .lock-card h1 {
+    font-size: 21px;
+    letter-spacing: 4px;
+    color: #6b4a5e;
+    margin: 22px 0 10px;
+    font-weight: 600;
+  }
+  .lock-hint {
+    font-size: 14px;
+    color: #9a7280;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+  }
+  .lock-input-wrap { display: flex; gap: 10px; }
+  .lock-input-wrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 16px;
+    border: 2px solid rgba(255,255,255,0.75);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.7);
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-align: center;
+    outline: none;
+    color: #5a4a52;
+  }
+  .lock-input-wrap input:focus { border-color: #e39aa3; }
+  .lock-input-wrap button {
+    padding: 13px 22px;
+    border: none;
+    border-radius: 12px;
+    background: #a8586e;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .lock-input-wrap button:hover { background: #a83f56; transform: translateY(-2px); }
+  .lock-err {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #c0392b;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .lock-err.show { opacity: 1; }
+  .shake { animation: shake 0.4s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
 </style>
 </head>
 <body>
+
+<!-- 密码锁屏 -->
+<div class="lock" id="lock">
+  <div class="lock-card">
+    <span class="lock-heart">♡</span>
+    <h1>一封只想给你看的信</h1>
+    <p class="lock-hint">请输入密码才能继续</p>
+    <div class="lock-input-wrap">
+      <input type="password" id="pwdInput" placeholder="输入密码" maxlength="20" autocomplete="off">
+      <button id="pwdBtn">打开</button>
+    </div>
+    <p class="lock-err" id="lockErr">密码不对，再想想</p>
+  </div>
+</div>
 
 <!-- 背景 -->
 <div class="sky">
@@ -609,6 +711,34 @@
       btn.textContent = '🎵';
     }
   });
+})();
+
+/* ===== 密码验证 ===== */
+(function () {
+  /* 改密码在这里：把 '20260830' 换成你想要的密码 */
+  var PASSWORD = '20260830';
+  var lock = document.getElementById('lock');
+  var input = document.getElementById('pwdInput');
+  var btn = document.getElementById('pwdBtn');
+  var err = document.getElementById('lockErr');
+
+  function unlock() {
+    if (input.value === PASSWORD) {
+      lock.classList.add('hide');
+      setTimeout(function () { lock.style.display = 'none'; }, 900);
+    } else {
+      err.classList.add('show');
+      input.classList.add('shake');
+      setTimeout(function () { input.classList.remove('shake'); }, 400);
+      setTimeout(function () { err.classList.remove('show'); }, 2000);
+    }
+  }
+
+  btn.addEventListener('click', unlock);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') unlock();
+  });
+  input.focus();
 })();
 </script>
 </body>
