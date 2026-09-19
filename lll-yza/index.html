@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给路路的一封信</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 45%, #0f3460 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .card {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #eae4f0;
+    padding: 48px 36px;
+    max-width: 520px;
+    animation: fadeUp 1.2s ease both;
+  }
+  .card .line {
+    width: 42px;
+    height: 2px;
+    background: #f0b7d0;
+    margin: 0 auto 28px;
+    border-radius: 2px;
+  }
+  .card h1 {
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  .card p {
+    font-size: 15px;
+    line-height: 2;
+    letter-spacing: 2px;
+    color: #cfd6e6;
+  }
+  .heart {
+    font-size: 40px;
+    margin-top: 30px;
+    animation: beat 1.6s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.12); }
+    40% { transform: scale(1); }
+    60% { transform: scale(1.1); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <canvas class="stars" id="stars"></canvas>
+  <div class="card">
+    <div class="line"></div>
+    <h1>给 路路 的一封信</h1>
+    <p>这里，装着一句<br>藏了很多年、<br>终于想当面说出口的话。</p>
+    <span class="heart">♡</span>
+  </div>
+
+<script>
+(function () {
+  var canvas = document.getElementById('stars');
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < 140; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.4 + 0.3,
+      a: Math.random(),
+      s: Math.random() * 0.008 + 0.002
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < stars.length; i++) {
+      var st = stars[i];
+      st.a += st.s;
+      if (st.a > 1 || st.a < 0.2) st.s = -st.s;
+      ctx.globalAlpha = st.a;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
