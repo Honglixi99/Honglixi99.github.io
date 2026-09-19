@@ -617,6 +617,37 @@
     letter-spacing: 2px;
     margin: 18px 0;
   }
+
+  /* ===== 正式内容占位卡 ===== */
+  .placeholder-card {
+    background: rgba(255,255,255,0.42);
+    backdrop-filter: blur(12px);
+    border-radius: 26px;
+    padding: 56px 44px;
+    max-width: 520px;
+    box-shadow: 0 14px 46px rgba(0,0,0,0.12);
+    text-align: center;
+  }
+  .ph-heart {
+    font-size: 40px;
+    color: #a83f56;
+    display: inline-block;
+    animation: beat 1.6s ease-in-out infinite;
+    margin-bottom: 26px;
+  }
+  .ph-main {
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: #6b4a5e;
+    line-height: 2.2;
+  }
+  .ph-sub {
+    margin-top: 26px;
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: #9a7280;
+    line-height: 2.2;
+  }
 </style>
 </head>
 <body>
@@ -670,131 +701,17 @@
 <!-- 音乐文件之后替换：把音频文件放到 static/lll-yza/ 下，改下面的 src 即可 -->
 <audio id="bgm" loop src=""></audio>
 
-<!-- 屏1 开场 -->
+<!-- 正式内容占位：等见面那天再填（本地改，先不提交） -->
 <section class="hero reveal">
-  <p class="date">二〇二六年 · 八月 · 三十日</p>
-  <p>从这一天起，<br>我多了一个想一起走路的人。</p>
-  <div class="scroll-hint">向下滑动 ▼</div>
-</section>
-
-<!-- 屏2 计时器 -->
-<section class="counter reveal">
-  <div class="counter-wrap">
-    <p class="counter-title">我们已经一起走过</p>
-    <div class="timer">
-      <div class="cell"><div class="num" id="d">0</div><div class="label">天</div></div>
-      <div class="cell"><div class="num" id="h">0</div><div class="label">时</div></div>
-      <div class="cell"><div class="num" id="m">0</div><div class="label">分</div></div>
-      <div class="cell"><div class="num" id="s">0</div><div class="label">秒</div></div>
-    </div>
-    <p class="counter-sub">而且，还在一秒一秒地变多。</p>
+  <div class="placeholder-card">
+    <span class="ph-heart">♡</span>
+    <p class="ph-main">这里藏着一封信，</p>
+    <p class="ph-main">我还在一个字一个字地想。</p>
+    <p class="ph-sub">等我们见面那天，<br>再一起来看吧。</p>
   </div>
-</section>
-
-<!-- 屏3 我眼里的你 -->
-<section class="about reveal">
-  <div class="card">
-    <h2>我眼里的你</h2>
-    <div class="item"><span class="icon">🥾</span><span>爱徒步，爱旅游，脚步总朝着远方和山里去。</span></div>
-    <div class="item"><span class="icon">🐈</span><span>家里有一只小猫，大概，是你在山风之外最软的牵挂。</span></div>
-    <div class="item"><span class="icon">🌅</span><span>眼里的光，比晨光还亮。</span></div>
-    <div class="douyin-note">
-      其实我很早就在抖音刷到过你徒步的视频了。<br>
-      那时候还没敢找你说话，就一遍一遍地看。
-    </div>
-  </div>
-</section>
-
-<!-- 屏4 照片墙 -->
-<section class="photos reveal">
-  <h2>关于你的这些画面</h2>
-  <p class="sub">（照片占位，之后替换成真的）</p>
-  <div class="photo-grid">
-    <div class="photo-slot" id="ph1"><span class="ph-icon">📷</span><span>照片 1</span></div>
-    <div class="photo-slot" id="ph2"><span class="ph-icon">📷</span><span>照片 2</span></div>
-    <div class="photo-slot" id="ph3"><span class="ph-icon">📷</span><span>照片 3</span></div>
-  </div>
-  <div class="cat-card">
-    <div class="cat-img" id="catImg">🐾</div>
-    <div class="cat-text">
-      还有这只<strong>小家伙</strong>，<br>
-      以后，也是我们一起照顾的宝贝。
-    </div>
-  </div>
-</section>
-
-<!-- 时间线（以后加内容：复制一个 .t-item 改日期和文字即可） -->
-<section class="timeline reveal">
-  <h2>我们走过的这段路</h2>
-  <p class="sub">一路向前，未完待续</p>
-  <div class="track">
-
-    <div class="t-item">
-      <div class="t-date">中学 · 很多年前</div>
-      <div class="t-title">第一次心动</div>
-      <div class="t-desc">那时候还不懂什么叫喜欢，只觉得这个人和别人不一样。</div>
-    </div>
-
-    <div class="t-item">
-      <div class="t-date">2026 年</div>
-      <div class="t-title">重新联系</div>
-      <div class="t-desc">隔着那么多年，在微信上又找到你。原来有些缘分，绕一圈还是会回来。</div>
-    </div>
-
-    <div class="t-item now">
-      <div class="t-date">2026 年 8 月 30 日</div>
-      <div class="t-title">我们在一起</div>
-      <div class="t-desc">这一天，藏了很多年的那句话，终于说给了对的人。</div>
-    </div>
-
-    <div class="t-item future">
-      <div class="t-date">以后</div>
-      <div class="t-title">还要一起走很远</div>
-      <div class="t-desc">去你想去的山，走你想走的路。往后的每一步，我都在。</div>
-    </div>
-
-  </div>
-</section>
-
-<!-- 屏5 告白 -->
-<section class="confession reveal">
-  <div class="words">
-    <span class="heart-icon">💗</span>
-    <div class="big">我爱你</div>
-    <div class="text" id="confessText">（这里放你的表白文字）</div>
-  </div>
-</section>
-
-<!-- 屏6 落款 -->
-<section class="ending reveal">
-  <p>路还很长，<br>我们一起走。</p>
-  <p class="sign">—— 写给路路</p>
 </section>
 
 <script>
-/* ===== 计时器：从 2026-08-30 正计时 ===== */
-(function () {
-  var start = new Date('2026-08-30T00:00:00+08:00');
-  var dEl = document.getElementById('d');
-  var hEl = document.getElementById('h');
-  var mEl = document.getElementById('m');
-  var sEl = document.getElementById('s');
-  function tick() {
-    var diff = new Date() - start;
-    if (diff < 0) diff = 0;
-    var days = Math.floor(diff / 86400000);
-    var hours = Math.floor(diff / 3600000) % 24;
-    var mins = Math.floor(diff / 60000) % 60;
-    var secs = Math.floor(diff / 1000) % 60;
-    dEl.textContent = days;
-    hEl.textContent = hours;
-    mEl.textContent = mins;
-    sEl.textContent = secs;
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
-
 /* ===== 滚动渐显 ===== */
 (function () {
   var els = document.querySelectorAll('.reveal');
