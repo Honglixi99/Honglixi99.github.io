@@ -582,6 +582,35 @@
     transition: transform 0.2s;
   }
   .easter-back:hover { transform: translateY(-2px); }
+
+  /* 彩蛋里的约定 */
+  .easter-promise {
+    margin: 26px 0;
+    padding: 24px 20px;
+    background: rgba(255,255,255,0.45);
+    border-radius: 16px;
+    border: 1.5px dashed rgba(194,53,106,0.4);
+  }
+  .promise-title {
+    font-size: 16px;
+    color: #8a4060;
+    font-weight: 600;
+    line-height: 2;
+    margin-bottom: 14px;
+  }
+  .promise-text {
+    font-size: 14px;
+    color: #6b4a5e;
+    line-height: 2.1;
+    margin-bottom: 12px;
+  }
+  .promise-quote {
+    font-size: 18px;
+    color: #c2356a;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 18px 0;
+  }
 </style>
 </head>
 <body>
@@ -605,9 +634,16 @@
   <div class="easter-card">
     <span class="easter-emoji">🥚✨</span>
     <h2>宝宝，你居然发现了彩蛋！</h2>
-    <p class="easter-text">你试到了我们在一起的日子，<br>或者已经锲而不舍地试了 9 次——<br>所以才看到了这个秘密小页。</p>
+    <p class="easter-text">你试到了我们在一起的日子，<br>或者已经锲而不舍地试了 11 次——<br>所以才看到了这个秘密小页。</p>
     <p class="easter-text">嘿嘿，真正的内容先保密。<br>等我们见面那天，<br>我会在信里亲手交给你。</p>
-    <p class="easter-miss">在那之前，只想说一句：<br><strong>我好想你。</strong></p>
+    <div class="easter-promise">
+      <p class="promise-title">既然你都找到这儿了，<br>那我们做个约定，好吗？</p>
+      <p class="promise-text">在你生日前一周之内，<br>只要你对我说一句：</p>
+      <p class="promise-quote">「为什么乌鸦像写字台？」</p>
+      <p class="promise-text">等你生日那天，<br>我就再给你一个惊喜。</p>
+      <p class="promise-text">这句话我会一直记着的。<br>要是你没进过这个彩蛋页，<br>这个约定可就不存在咯，哈哈。</p>
+    </div>
+    <p class="easter-miss">在那之前，只想说一句：<br><strong>我好想你。</strong><br>也期待你生日前，亲口对我说那句话。</p>
     <button class="easter-back" id="easterBack">再试一次 →</button>
   </div>
 </div>
@@ -790,9 +826,9 @@
 (function () {
   /* 真正的密码 */
   var PASSWORD = '1wbyrnygr';
-  /* 彩蛋触发：输入 0830，或输错达到 9 次 */
+  /* 彩蛋触发：输入 0830，或输错达到 11 次 */
   var EGG = '0830';
-  var EGG_TIMES = 9;
+  var EGG_TIMES = 11;
 
   var lock = document.getElementById('lock');
   var input = document.getElementById('pwdInput');
