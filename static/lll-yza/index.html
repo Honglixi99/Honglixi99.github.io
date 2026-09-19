@@ -521,6 +521,67 @@
     25% { transform: translateX(-8px); }
     75% { transform: translateX(8px); }
   }
+
+  /* ===== 彩蛋页 ===== */
+  .easter {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: linear-gradient(180deg, #ffe3ec 0%, #ffc9d6 40%, #f5a8bf 70%, #e38bb3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .easter.show { opacity: 1; visibility: visible; }
+  .easter-card {
+    text-align: center;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(14px);
+    border-radius: 26px;
+    padding: 50px 42px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 14px 46px rgba(0,0,0,0.14);
+  }
+  .easter-emoji { font-size: 44px; display: inline-block; animation: beat 1.6s ease-in-out infinite; }
+  .easter-card h2 {
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: #8a4060;
+    margin: 18px 0 26px;
+  }
+  .easter-text {
+    font-size: 15px;
+    line-height: 2.1;
+    color: #6b4a5e;
+    margin-bottom: 20px;
+  }
+  .easter-miss {
+    font-size: 16px;
+    line-height: 2.1;
+    color: #8a4060;
+    margin: 26px 0 30px;
+  }
+  .easter-miss strong {
+    font-size: 20px;
+    color: #c2356a;
+    letter-spacing: 3px;
+  }
+  .easter-back {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.75);
+    color: #8a4060;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .easter-back:hover { transform: translateY(-2px); }
 </style>
 </head>
 <body>
@@ -536,6 +597,18 @@
       <button id="pwdBtn">打开</button>
     </div>
     <p class="lock-err" id="lockErr">密码不对，再想想</p>
+  </div>
+</div>
+
+<!-- 彩蛋页 -->
+<div class="easter" id="easter">
+  <div class="easter-card">
+    <span class="easter-emoji">🥚✨</span>
+    <h2>宝宝，你居然发现了彩蛋！</h2>
+    <p class="easter-text">你试到了我们在一起的日子，<br>或者已经锲而不舍地试了 9 次——<br>所以才看到了这个秘密小页。</p>
+    <p class="easter-text">嘿嘿，真正的内容先保密。<br>等我们见面那天，<br>我会在信里亲手交给你。</p>
+    <p class="easter-miss">在那之前，只想说一句：<br><strong>我好想你。</strong></p>
+    <button class="easter-back" id="easterBack">再试一次 →</button>
   </div>
 </div>
 
@@ -713,30 +786,53 @@
   });
 })();
 
-/* ===== 密码验证 ===== */
+/* ===== 密码验证 + 彩蛋 ===== */
 (function () {
-  /* 改密码在这里：把 '20260830' 换成你想要的密码 */
-  var PASSWORD = '20260830';
+  /* 真正的密码 */
+  var PASSWORD = '1wbyrnygr';
+  /* 彩蛋触发：输入 0830，或输错达到 9 次 */
+  var EGG = '0830';
+  var EGG_TIMES = 9;
+
   var lock = document.getElementById('lock');
   var input = document.getElementById('pwdInput');
   var btn = document.getElementById('pwdBtn');
   var err = document.getElementById('lockErr');
+  var easter = document.getElementById('easter');
+  var easterBack = document.getElementById('easterBack');
+  var wrongCount = 0;
+
+  function showEgg() {
+    easter.classList.add('show');
+  }
 
   function unlock() {
-    if (input.value === PASSWORD) {
+    var val = input.value.trim();
+    if (val === PASSWORD) {
       lock.classList.add('hide');
       setTimeout(function () { lock.style.display = 'none'; }, 900);
-    } else {
-      err.classList.add('show');
-      input.classList.add('shake');
-      setTimeout(function () { input.classList.remove('shake'); }, 400);
-      setTimeout(function () { err.classList.remove('show'); }, 2000);
+      return;
     }
+    wrongCount++;
+    if (val === EGG || wrongCount >= EGG_TIMES) {
+      showEgg();
+      return;
+    }
+    err.classList.add('show');
+    input.classList.add('shake');
+    input.value = '';
+    setTimeout(function () { input.classList.remove('shake'); }, 400);
+    setTimeout(function () { err.classList.remove('show'); }, 2000);
   }
 
   btn.addEventListener('click', unlock);
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') unlock();
+  });
+  easterBack.addEventListener('click', function () {
+    easter.classList.remove('show');
+    input.value = '';
+    input.focus();
   });
   input.focus();
 })();
