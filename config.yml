@@ -41,6 +41,8 @@ params:
     buttons:
       - name: 文章
         url: /posts
+      - name: 写给路路
+        url: /lulu
       - name: 关于
         url: /about
 
@@ -66,6 +68,10 @@ menu:
       name: 文章
       url: /posts/
       weight: 10
+    - identifier: lulu
+      name: 写给路路
+      url: /lulu/
+      weight: 15
     - identifier: tags
       name: 标签
       url: /tags/
