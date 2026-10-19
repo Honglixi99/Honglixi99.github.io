@@ -8,7 +8,7 @@ summary: "通用必背（自我介绍 3 版 / gap 话术 + 追问预案 / 压力
 showToc: true
 ---
 
-> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · ② [完全手册](/lulu/career-change-manual/) · ③ [简历参考大全](/lulu/resume-examples/) · **④ 面试背诵手册（本篇）** · [📑 速查 PPT](/lulu/ppt/)
+> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · ② [完全手册](/lulu/career-change-manual/) · ③ [简历参考大全](/lulu/resume-examples/) · **④ 面试背诵手册（本篇）**
 
 
 **用法**：通用篇（第一章）所有岗位必背；专业篇只背你投的岗位。每道题的参考答案按"口述 30-60 秒"写，背熟框架和数据，面试时用自己的话说出来。
