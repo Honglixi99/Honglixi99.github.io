@@ -8,7 +8,7 @@ summary: "14 份完整简历全文，每岗 2 份，含「值得抄的点」逐�
 showToc: true
 ---
 
-> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · ② [完全手册](/lulu/career-change-manual/) · **③ 简历参考大全（本篇）** · ④ [面试背诵手册](/lulu/interview-handbook/) · ⑤ [难答的三个问题](/lulu/hard-interview-questions/)
+> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · ② [完全手册](/lulu/career-change-manual/) · **③ 简历参考大全（本篇）** · ④ [面试背诵手册](/lulu/interview-handbook/)
 
 
 **使用说明**
