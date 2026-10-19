@@ -8,7 +8,7 @@ summary: "七大岗位逐项拆解：一天的真实工作、能力模型、精�
 showToc: true
 ---
 
-> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · **② 完全手册（本篇）** · ③ [简历参考大全](/lulu/resume-examples/) · ④ [面试背诵手册](/lulu/interview-handbook/)
+> 「[写给路路](/lulu/)」找工作系列：① [导航：先把路线图说清楚](/lulu/hello-lulu/) · **② 完全手册（本篇）** · ③ [简历参考大全](/lulu/resume-examples/) · ④ [面试背诵手册](/lulu/interview-handbook/) · ⑤ [难答的三个问题](/lulu/hard-interview-questions/)
 
 **适用对象**：本科学历 · 一线城市 · 1-3 年工作经验 · gap 半年 · 目标 3 个月内重回职场
 
