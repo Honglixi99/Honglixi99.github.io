@@ -9,14 +9,26 @@ description: "找工作全攻略：一篇导航 + 七大岗位完全手册 + 14 
 <p>想看看了、想聊聊了，我一直都在。</p>
 <p class="lulu-ps">P.S. 哪天想动一动了，也可以一起干件小事：挑十个想投的岗位发我，我们一起看。弄完，我请你吃上次你说想吃的那家云南菜。</p>
 </div>
+<div class="lulu-next">
+<div class="lulu-next-title">到了北京之后</div>
+<p>我教你用 AI，把 AI 交到你手上。它不累、不烦、不会嫌你问题笨，半夜也在。</p>
+<p>岗位贴进去能告诉你对方想要什么；简历改十遍它都陪你；让它当面试官，模拟到你不紧张为止；做作品最耗时间的活，它一下午给你出初稿。</p>
+<p>我只教你怎么使唤它，剩下你自己来。</p>
+</div>
 <style>
 .lulu-note{background:#fdf6ec;border:1px solid #f0e2c8;border-radius:14px;padding:1.25em 1.5em;margin:0 0 1.6em;line-height:2;font-size:1.04em}
 .lulu-note p{margin:0 0 .55em}
 .lulu-note p:last-child{margin-bottom:0}
 .lulu-note-head{font-size:1.35em;margin-bottom:.3em}
 .lulu-ps{font-size:.93em;color:#8a7a5f;padding-top:.7em;border-top:1px dashed #eadfc6;margin-top:.85em}
+.lulu-next{background:#f6f5f1;border:1px solid #e6e3da;border-left:3px solid #d9c9a8;border-radius:14px;padding:1.25em 1.5em;margin:0 0 1.8em;line-height:2;font-size:1.01em}
+.lulu-next p{margin:0 0 .6em}
+.lulu-next p:last-child{margin-bottom:0;font-size:.95em;color:#7d7466}
+.lulu-next-title{font-weight:600;margin-bottom:.5em;letter-spacing:.02em}
 html.dark .lulu-note{background:#2b2620;border-color:#3e382c}
 html.dark .lulu-ps{color:#b3a78e;border-top-color:#3e382c}
+html.dark .lulu-next{background:#24231f;border-color:#35332c;border-left-color:#5a5245}
+html.dark .lulu-next p:last-child{color:#a29a8b}
 </style>
 
 这个栏目是专门写给路路的找工作攻略——五篇文章，从定策略、选岗位、学技能，到改简历、背面试题，一条线走完：
